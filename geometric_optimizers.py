@@ -1,10 +1,12 @@
 import time
 import numpy as np
+import numpy.linalg as la
+from scipy.linalg import sqrtm, logm, expm
 
-#nice problems --> https://arxiv.org/pdf/1302.0125.pdf
 
 #Classic RGD optimizer, for rates, check http://proceedings.mlr.press/v49/zhang16b.pdf
 def RGD_optimizer(K,x0,L,cost,grad,exp):
+    print('Running Riemannian GD...')
     x = [x0 for i in range(K)]
     t = [0 for i in range(K)]
     f = np.zeros((K,))
@@ -18,8 +20,9 @@ def RGD_optimizer(K,x0,L,cost,grad,exp):
         f[k+1] = cost(x[k+1])
     return t, x, f
 
-#RAGD optimizer, by Zhang and Sra (2018). Accelerated, check http://proceedings.mlr.press/v75/zhang18a/zhang18a.pdf
+#RAGD optimizer, by Zhang and Sra (2018) check http://proceedings.mlr.press/v75/zhang18a/zhang18a.pdf
 def RAGD_optimizer(K,x0,L,mu,cost,grad,exp,log):
+    print('Running Riemannian AGD (Zhang and Sra)...')
     x = [x0 for i in range(K)]
     t = [0 for i in range(K)]
     y = [0*x0 for i in range(K)]
@@ -74,8 +77,12 @@ def linesearch(v,x,log,exp,cost,line_search_iterations):
             b = p4
     return b
 
-#An optimizer we propose in this paper, adaptation of https://arxiv.org/abs/1809.05895
+#The optimizer we propose in this paper, adaptation of https://arxiv.org/abs/1809.05895
 def RAGDsDR_optimizer(K,x0,L,cost,grad,exp,log,transp,line_search_iterations):
+    if line_search_iterations>0:
+        print('Running Riemannian AGDsDR(linesearch)...')
+    else:
+        print('Running Riemannian AGDsDR(no linesearch)...')
     x = [x0 for i in range(K)]
     t = [0 for i in range(K)]
     y = [0*x0 for i in range(K)]
@@ -91,12 +98,20 @@ def RAGDsDR_optimizer(K,x0,L,cost,grad,exp,log,transp,line_search_iterations):
         if line_search_iterations>0:
             beta[k] = linesearch(v[k],x[k],log,exp,cost,line_search_iterations)
         else:
-            beta[k] = k/(k+2)
-        y[k] = exp(v[k], beta[k]* log(v[k],x[k]))
+            beta[k] = k/(k+3)
+        try:
+            y[k] = exp(v[k], beta[k]* log(v[k],x[k]))
+        except:
+            print('An error occurred in the computation of y[k]!!, setting it to x[k]')
+            y[k] = x[k]
         x[k+1] = exp(y[k],-h*grad(y[k]))
         a[k+1] = np.max(np.roots(np.array([1, -h, -h*A[k]])))
         A[k+1] = A[k]+a[k+1]
-        v[k+1] = exp(v[k],-a[k+1]*transp(y[k],v[k],grad(y[k])))
+        try:
+            v[k+1] = exp(v[k],-a[k+1]*transp(y[k],v[k],grad(y[k])))
+        except:
+            print('An error occurred in the computation of v[k+1]!!, setting it to v[k]')
+            v[k+1] = v[k]
         t2 = time.time()
         t[k+1] = t[k]+(t2-t1)
         f[k+1] = cost(x[k+1])
@@ -104,6 +119,10 @@ def RAGDsDR_optimizer(K,x0,L,cost,grad,exp,log,transp,line_search_iterations):
 
 #A modification of the last optimizer, with no parallel transport needed. Performance is identical.
 def RAGDsDR_optimizer_no_transp(K,x0,L,cost,grad,exp,log,line_search_iterations): #an older version we had
+    if line_search_iterations>0:
+        print('Running Riemannian AGDsDR(linesearch), old version ...')
+    else:
+        print('Running Riemannian AGDsDR(no linesearch), old version ...')
     x = [x0 for i in range(K)]
     t = [0 for i in range(K)]
     y = [0*x0 for i in range(K)]
@@ -132,6 +151,7 @@ def RAGDsDR_optimizer_no_transp(K,x0,L,cost,grad,exp,log,line_search_iterations)
 
 #Riemannian linear coupling, adaptation of Allen-Zhu, Orecchia (2014) https://arxiv.org/abs/1407.1537
 def Riemann_coupling(K,x0,L,lam,cost,grad,exp,log): 
+    print('Running Riemannian linear coupling ...')    
     x = [x0 for i in range(K)]
     y = [x0 for i in range(K)]
     z = [x0 for i in range(K)]

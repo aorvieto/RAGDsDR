@@ -22,7 +22,6 @@ def karcher_mean(A, tol):
         for i in range(n): av_logs+=(1/n)*logm(la.multi_dot([sqrt_x_sol.T,la.inv(A[:,:,i]),sqrt_x_sol]))
         x_sol_new = la.multi_dot([sqrt_x_sol,expm(-(1/5)*av_logs),sqrt_x_sol.T])
         error = la.norm(x_sol_new-x_sol,"fro")
-        print(error)
         x_sol = x_sol_new
     return x_sol
     
