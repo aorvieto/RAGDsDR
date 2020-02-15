@@ -4,10 +4,15 @@ We develop a new Riemannian descent algorithmwith an accelerated rate of converg
 
 ## Requirements
 pymanopt==0.2.4
+
 torch==1.0.0
+
 scipy==1.1.0 (statsmodels fails with scipy >=1.3.0 )
+
 numpy==1.15.4
+
 matplotlib==2.2.3
+
 
 ## Contents of this folder
 This folder contains 5 files
