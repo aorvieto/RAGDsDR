@@ -1,5 +1,7 @@
 # Practical Accelerated Optimization on Riemannian Manifolds
 
+arvix version: https://arxiv.org/abs/2002.04144
+
 We develop a new Riemannian descent algorithm with an accelerated rate of convergence.  We focus on functions that are geodesically convex or weakly-quasi-convex, which are weaker function classes compared to prior work that has considered geodesically strongly convex functions. Ourproof of convergence relies on a novel estimates equence which allows to demonstrate the dependency of the convergence rate on the curvature of the manifold. We validate our theoretical results empirically on several optimization problems defined on a sphere and on the manifold of positive definite matrices.
 
 ## Requirements
