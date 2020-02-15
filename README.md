@@ -2,6 +2,12 @@
 
 We develop a new Riemannian descent algorithmwith an accelerated rate of convergence.  We focus on functions that are geodesically convex or weakly-quasi-convex, which are weaker function classes compared to prior work that has considered geodesically strongly convex functions. Ourproof of convergence relies on a novel estimatesequence which allows to demonstrate the dependency of the convergence rate on the curvature ofthe manifold. We validate our theoretical resultsempirically on several optimization problems de-fined on a sphere and on the manifold of positivedefinite matrices.
 
+## Requirements
+pymanopt==0.2.4
+torch==1.0.0
+scipy==1.1.0 (statsmodels fails with scipy >=1.3.0 )
+numpy==1.15.4
+matplotlib==2.2.3
 
 ## Contents of this folder
 This folder contains 5 files
