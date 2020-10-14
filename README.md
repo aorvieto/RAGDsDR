@@ -1,8 +1,7 @@
-# Practical Accelerated Optimization on Riemannian Manifolds
+# Momentum Improves Optimization on Riemannian Manifolds
 
-arvix version: https://arxiv.org/abs/2002.04144
 
-We develop a new Riemannian descent algorithm with an accelerated rate of convergence.  We focus on functions that are geodesically convex or weakly-quasi-convex, which are weaker function classes compared to prior work that has considered geodesically strongly convex functions. Ourproof of convergence relies on a novel estimates equence which allows to demonstrate the dependency of the convergence rate on the curvature of the manifold. We validate our theoretical results empirically on several optimization problems defined on a sphere and on the manifold of positive definite matrices.
+We develop a new Riemannian descent algorithm that relies on momentum to improve over existing first-order methods for geodesically convex optimization. In contrast, accelerated convergence rates proved in prior work have only been shown to hold for geodesically strongly-convex objective functions. We further extend our algorithm to geodesically weakly-quasi-convex objectives. Our proofs of convergence rely on a novel estimate sequence that illustrates the dependency of the convergence rate on the curvature of the manifold. We validate our theoretical results empirically on several optimization problems defined on the sphere and on the manifold of positive definite matrices.
 
 ## Requirements
 pymanopt==0.2.4
